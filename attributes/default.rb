@@ -18,6 +18,7 @@
 #
 default[:vsftpd][:chroot_local_user] = "YES"
 default[:vsftpd][:chroot_users] = Array.new 
+default[:vsftpd][:use_ssl] = true
 default[:vsftpd][:use_ssl_certs_from_cookbook] = true
 default[:vsftpd][:ssl_cert_path] = "/etc/ssl/certs"
 default[:vsftpd][:ssl_private_key_path] = "/etc/ssl/private"
