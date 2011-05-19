@@ -52,7 +52,11 @@ dirmessage_enable=YES
 use_localtime=YES
 #
 # Activate logging of uploads/downloads.
+<% if node[:vsftpd][:xferlog_enable] %>
 xferlog_enable=YES
+<% else %>
+xferlog_enable=NO
+<% end %>
 #
 # Make sure PORT transfer connections originate from port 20 (ftp-data).
 connect_from_port_20=YES

@@ -22,3 +22,4 @@ default[:vsftpd][:use_ssl_certs_from_cookbook] = true
 default[:vsftpd][:ssl_cert_path] = "/etc/ssl/certs"
 default[:vsftpd][:ssl_private_key_path] = "/etc/ssl/private"
 default[:vsftpd][:ssl_certs_basename] = "ftp.example.com"
+default[:vsftpd][:xferlog_enable] = true
