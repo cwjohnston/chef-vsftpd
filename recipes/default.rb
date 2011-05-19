@@ -45,7 +45,7 @@ if node[:vsftpd][:virtual_users_enable]
     mode 0644
   end
 
-  template "/etc/vsftpd/ftpd.passwd" do
+  template "/etc/vsftpd.passwd" do
     source "ftpd.passwd.erb"
     owner "root"
     group "root"
