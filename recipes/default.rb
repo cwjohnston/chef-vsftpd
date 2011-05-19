@@ -37,7 +37,7 @@ template "/etc/vsftpd.chroot_list" do
 end
 
 template "/etc/vsftpd.conf" do
-  source "vsftpd.conf"
+  source "vsftpd.conf.erb"
   owner "root"
   group "root"
   mode 0644
