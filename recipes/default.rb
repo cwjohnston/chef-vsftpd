@@ -32,7 +32,8 @@ virt_users = Array.new
 
 if node[:vsftpd][:virtual_users_enable]
 
-  search(:ftp_users).each do |user|
+  found_users = search(:ftp_users)
+  found_users.each do |user|
     virt_users << user['id']
   end
 
@@ -50,7 +51,7 @@ if node[:vsftpd][:virtual_users_enable]
     owner "root"
     group "root"
     mode 0600
-    variables(:users => virt_users)
+    variables(:users => found_users)
   end
 
 end
