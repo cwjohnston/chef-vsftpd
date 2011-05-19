@@ -28,12 +28,31 @@ if node[:vsftpd][:use_ssl_certs_from_cookbook]
   end
 end
 
-template "/etc/vsftpd.chroot_list" do
-  source "vsftpd.chroot_list"
-  owner "root"
-  group "root"
-  mode 0644
-  variables(:users => node[:vsftpd][:chroot_users])
+virt_users = Array.new
+
+if node[:vsftpd][:virtual_users_enable]
+
+  search(:ftp_users).each do |user|
+    virt_users << user['id']
+  end
+
+  package "libpam-pwdfile"
+
+  cookbook_file "/etc/pam.d/vsftpd" do
+    source "vsftpd-pam"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+
+  template "/etc/vsftpd/ftpd.passwd" do
+    source "ftpd.passwd.erb"
+    owner "root"
+    group "root"
+    mode 0600
+    variables(:users => virt_users)
+  end
+
 end
 
 template "/etc/vsftpd.conf" do
@@ -50,3 +69,15 @@ template "/etc/vsftpd.conf" do
   notifies :restart, resources(:service => "vsftpd")
 end
 
+chroot_users = node[:vsftpd][:chroot_users]
+virt_users.each do |user|
+  chroot_users << user
+end
+
+template "/etc/vsftpd.chroot_list" do
+  source "vsftpd.chroot_list"
+  owner "root"
+  group "root"
+  mode 0644
+  variables(:users => chroot_users)
+end
