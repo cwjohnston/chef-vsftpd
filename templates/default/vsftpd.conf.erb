@@ -28,6 +28,7 @@ chroot_list_enable=<%= node[:vsftpd][:chroot_list_enable] ? 'YES' : 'NO' %>
 chroot_list_file=<%= node[:vsftpd][:chroot_list_file] %>
 secure_chroot_dir=/var/run/vsftpd/empty
 pam_service_name=<%= node[:vsftpd][:pam_service_name] %>
+setproctitle_enable=<%= node[:vsftpd][:setproctitle_enable] ? 'YES' : 'NO' %>
 <% if node[:vsftpd][:ssl_enable] %>
 ssl_enable=<%= node[:vsftpd][:ssl_enable] ? 'YES': 'NO' %>
 rsa_cert_file=<%= @ssl_cert_path %>/<%= @ssl_certs_basename %>.pem

@@ -26,6 +26,7 @@ default[:vsftpd][:dirmessage_enable] = true
 default[:vsftpd][:nopriv_user] = "nobody"
 default[:vsftpd][:pam_service_name] = "vsftpd"
 default[:vsftpd][:listen_ipv6_exclusively] = false
+default[:vsftpd][:setproctitle_enable] = false
 # Login options
 default[:vsftpd][:anonymous_enable] = false
 default[:vsftpd][:local_enable] = false
