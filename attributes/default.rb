@@ -64,3 +64,4 @@ default[:vsftpd][:virtual_users_enable] = false
 default[:vsftpd][:guest_username] = "ftp"
 default[:vsftpd][:guest_enable] = true
 default[:vsftpd][:user_config_dir] = "/etc/vsftpd.userconf"
+default[:vsftpd][:virtual_use_local_privs] = false
