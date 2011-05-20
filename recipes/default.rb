@@ -14,6 +14,8 @@ service "vsftpd" do
   action [ :enable, :start ]
 end
 
+directory "/etc/vsftpd.userconf"
+
 if node[:vsftpd][:use_ssl]
   if node[:vsftpd][:use_ssl_certs_from_cookbook]
     cookbook_file "#{node[:vsftpd][:ssl_cert_path]}/#{node[:vsftpd][:ssl_certs_basename]}.pem" do
@@ -37,6 +39,13 @@ if node[:vsftpd][:virtual_users_enable]
   found_users = search(:ftp_users)
   found_users.each do |user|
     virt_users << user['id']
+
+    if user['conf']
+      template "/etc/vsftpd.userconf/#{user['id']}" do
+        source "userconf.erb"
+        variables(:conf => user['conf'])
+      end
+    end
   end
 
   package "libpam-pwdfile"
