@@ -59,6 +59,7 @@ default[:vsftpd][:async_abor_enable] = true
 default[:vsftpd][:idle_session_timeout] = 600
 default[:vsftpd][:data_connection_timeout] = 120
 default[:vsftpd][:deny_file] = Array.new
+default[:vsftpd][:max_per_ip] = 0
 # Virtual user options
 default[:vsftpd][:virtual_users_enable] = false
 default[:vsftpd][:guest_username] = "ftp"
