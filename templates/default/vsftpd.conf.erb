@@ -37,5 +37,5 @@ require_ssl_reuse=<%= node[:vsftpd][:require_ssl_reuse] ? 'YES' : 'NO' %>
 <% if node[:vsftpd][:virtual_users_enable] %>
 user_config_dir=<%= node[:vsftpd][:user_config_dir] %>
 guest_enable=<%= node[:vsftpd][:guest_enable] ? 'YES' : 'NO' %>
-guest_username=<%= node[:vsftpd][:virtual_username] %>
+guest_username=<%= node[:vsftpd][:guest_username] %>
 <% end %>
