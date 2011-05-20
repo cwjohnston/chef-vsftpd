@@ -19,7 +19,7 @@ xferlog_file=<%= node[:vsftpd][:xferlog_file] %>
 xferlog_std_format=<%= node[:vsftpd][:xferlog_std_format] ? 'YES' : 'NO' %>
 idle_session_timeout=<%= node[:vsftpd][:idle_session_timeout] %>
 data_connection_timeout=<%= node[:vsftpd][:data_connection_timeout] %>
-nopriv_user=<%= node[:vsftpd][:nopriv_user]
+nopriv_user=<%= node[:vsftpd][:nopriv_user] %>
 async_abor_enable=<%= node[:vsftpd][:async_abor_enabled] ? 'YES' : 'NO' %>
 #ftpd_banner=Welcome to blah FTP service.
 #banned_email_file=/etc/vsftpd.banned_emails
