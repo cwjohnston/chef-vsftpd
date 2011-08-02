@@ -27,6 +27,8 @@ default[:vsftpd][:nopriv_user] = "nobody"
 default[:vsftpd][:pam_service_name] = "vsftpd"
 default[:vsftpd][:listen_ipv6_exclusively] = false
 default[:vsftpd][:setproctitle_enable] = false
+default[:vsftpd][:pasv] = true
+default[:vsftpd][:pasv_port_range] = "1024,1048"
 # Login options
 default[:vsftpd][:anonymous_enable] = false
 default[:vsftpd][:local_enable] = false

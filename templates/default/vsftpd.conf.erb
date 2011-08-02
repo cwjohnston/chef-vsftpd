@@ -3,6 +3,12 @@ listen_ipv6=YES
 <% else %>
 listen=YES
 <% end %>
+<% if node[:vsftpd][:pasv] %>
+pasv_enable=YES
+pasv_min_port=<%= node[:vsftpd][:pasv_port_range].split(",").first %>
+pasv_max_port=<%= node[:vsftpd][:pasv_port_range].split(",").last %>
+pasv_address=<% if node.has_attribute?("ec2") %><%= node[:ec2][:public_ipv4] %><% else %><%= node[:ipaddress] %><% end %>
+<% end %>
 anonymous_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
 local_enable=<%= node[:vsftpd][:local_enable] ? 'YES' : 'NO' %>
 write_enable=<%= node[:vsftpd][:write_enable] ? 'YES' : 'NO' %>
