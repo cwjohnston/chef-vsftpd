@@ -11,7 +11,7 @@ package "vsftpd"
 
 service "vsftpd" do
   supports :status => true, :restart => true
-  action [ :enable, :start ]
+  action [:enable, :start]
 end
 
 directory "/etc/vsftpd.userconf"
