@@ -5,14 +5,13 @@ listen=YES
 <% end %>
 <% if node[:vsftpd][:pasv] %>
 pasv_enable=YES
-pasv_address=<% if node.has_attribute?("ec2") %><%= node[:ec2][:public_ipv4] %><% else %><%= node[:ipaddress] %><% end %>
 pasv_min_port=<%= node[:vsftpd][:pasv_min_port] %>
 pasv_max_port=<%= node[:vsftpd][:pasv_max_port] %>
+pasv_address=<%= node[:ipaddress] %>
 <% end %>
 anonymous_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
 local_enable=<%= node[:vsftpd][:local_enable] ? 'YES' : 'NO' %>
 write_enable=<%= node[:vsftpd][:write_enable] ? 'YES' : 'NO' %>
-#local_umask=022
 anon_upload_enable=<%= node[:vsftpd][:anon_upload_enable] ? 'YES' : 'NO' %>
 anon_mkdir_write_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
 dirmessage_enable=<%= node[:vsftpd][:dirmessage_enable] ? 'YES' : 'NO' %>
@@ -28,8 +27,6 @@ data_connection_timeout=<%= node[:vsftpd][:data_connection_timeout] %>
 nopriv_user=<%= node[:vsftpd][:nopriv_user] %>
 async_abor_enable=<%= node[:vsftpd][:async_abor_enable] ? 'YES' : 'NO' %>
 max_per_ip=<%= node[:vsftpd][:max_per_ip] %>
-#ftpd_banner=Welcome to blah FTP service.
-#banned_email_file=/etc/vsftpd.banned_emails
 chroot_local_user=<%= @chroot_local_user %>
 chroot_list_enable=<%= node[:vsftpd][:chroot_list_enable] ? 'YES' : 'NO' %>
 chroot_list_file=<%= node[:vsftpd][:chroot_list_file] %>
