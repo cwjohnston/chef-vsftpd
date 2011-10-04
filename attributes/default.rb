@@ -22,6 +22,9 @@
 
 ### RUNTIME OPTIONS
 #
+#
+default[:vsftpd][:ipaddress] = node[:ipaddress]
+#
 # If enabled, vsftpd will display directory listings with the time in your
 # local time zone. The default is to display GMT.
 # The times returned by the MDTM FTP command are also affected by this option.
