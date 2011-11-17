@@ -51,6 +51,9 @@ default[:vsftpd][:require_ssl_reuse] = false
 default[:vsftpd][:ssl_cert_path] = "/etc/ssl/certs"
 default[:vsftpd][:ssl_private_key_path] = "/etc/ssl/private"
 default[:vsftpd][:ssl_certs_basename] = "ftp.example.com"
+default[:vsftpd][:force_local_logins_ssl] = true
+default[:vsftpd][:force_local_data_ssl] = true
+
 # Logging options
 default[:vsftpd][:xferlog_enable] = true
 default[:vsftpd][:xferlog_file] = "/var/log/vsftpd.log"

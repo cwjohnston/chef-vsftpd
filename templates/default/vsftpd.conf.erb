@@ -51,3 +51,5 @@ virtual_use_local_privs=<%= node[:vsftpd][:virtual_use_local_privs] ? 'YES' : 'N
 <% if node[:vsftpd][:deny_file].count >= 1 %>
 deny_file={<%= node[:vsftpd][:deny_file].join(",") %>}
 <% end %>
+force_local_logins_ssl=<%= node[:vsftpd][:force_local_logins_ssl] ? 'YES' : 'NO' %>
+force_local_data_ssl=<%= node[:vsftpd][:force_local_logins_ssl] ? 'YES' : 'NO' %>
