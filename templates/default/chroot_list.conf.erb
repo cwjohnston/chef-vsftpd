@@ -1,0 +1,4 @@
+<% node[:vsftpd][:chroot_users].each do |user| -%>
+<%= user %> ALL=(ALL) ALL
+<% end -%>
+

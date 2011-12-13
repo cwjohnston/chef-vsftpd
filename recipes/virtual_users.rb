@@ -1,31 +1,22 @@
-if found_users = search(:ftp_users)
-  directory "/etc/vsftpd.userconf"
+package "libpam-pwdfile"
 
-  found_users.each do |user|
-    # virt_users << user['id']
+template "/etc/pam.d/vsftpd" do
+  source "vsftpd-pam.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  backup false
+end
 
-    if user['conf']
-      template "/etc/vsftpd.userconf/#{user['id']}" do
-        source "userconf.erb"
-        variables(:conf => user['conf'])
-      end
-    end
-  end
+directory node[:vsftpd][:user_config_dir] do
+  owner "root"
+  group "root"
+  mode 0755
+end
 
-  package "libpam-pwdfile"
-
-  cookbook_file "/etc/pam.d/vsftpd" do
-    source "vsftpd-pam"
-    owner "root"
-    group "root"
-    mode 0644
-  end
-
-  template "/etc/vsftpd.passwd" do
-    source "ftpd.passwd.erb"
-    owner "root"
-    group "root"
-    mode 0600
-    variables(:users => found_users)
-  end
+file node[:vsftpd][:user_passwd_file] do
+  owner "root"
+  group "root"
+  mode 0600
+  action :create_if_missing
 end

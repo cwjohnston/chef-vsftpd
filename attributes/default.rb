@@ -1,27 +1,4 @@
-#
-# Cookbook Name:: vsftpd
-# Attribute File:: sudoers
-#
-# Copyright 2010 Robert J. Berger
-#
-# Author: Robert J. Berger
-# Author: Cameron W. Johnston
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 ### RUNTIME OPTIONS
-#
 #
 default[:vsftpd][:ipaddress] = node[:ipaddress]
 #
@@ -55,7 +32,7 @@ default[:vsftpd][:listen_ipv6_exclusively] = false
 # You probably want to leave this off for security purposes.
 default[:vsftpd][:setproctitle_enable] = false
 #
-# Set to NO if you want to disallow the PASV method of obtaining a data connection.
+# Set to false if you want to disallow the PASV method of obtaining a data connection.
 default[:vsftpd][:pasv] = true
 #
 # The minium port to allocate for PASV style data connections.
@@ -79,7 +56,7 @@ default[:vsftpd][:anonymous_enable] = false
 # If enabled, normal user accounts in /etc/passwd (or wherever your PAM config
 # references) may be used to log in. This must be enable for any
 # non-anonymous login to work, including virtual users
-default[:vsftpd][:local_enable] = false
+default[:vsftpd][:local_enable] = true
 #
 # This controls whether any FTP commands which change the filesystem
 # are allowed or not. These commands are: STOR, DELE, RNFR, RNTO, MKD,
@@ -116,9 +93,9 @@ default[:vsftpd][:chown_username] = "ftp"
 
 
 
-### UMASK OPTIONS
+### CHROOT OPTIONS
 #
-# If set to YES, local users will be (by default) placed in a chroot() jail
+# If set to true, local users will be (by default) placed in a chroot() jail
 # in their home directory after login.
 # NOTE!! THIS OPTION HAS SECURITY IMPLICATIONS, ESPECIALLY IF THE USERS
 # have upload permission, or shell access. Only enable if you know
@@ -126,23 +103,29 @@ default[:vsftpd][:chown_username] = "ftp"
 # They apply to all FTP daemons which offer to put local users in chroot() jails.
 default[:vsftpd][:chroot_local_user] = true
 #
+# If enabled, along with chroot_local_user , then a chroot() jail location may
+# be specified on a per-user basis. Each user's jail is derived from their home
+# directory string in /etc/passwd. The occurrence of /./ in the home directory
+# string denotes that the jail is at that particular location in the path.
+default[:vsftpd][:passwd_chroot_enable] = true
+#
 # If activated, you may provide a list of local users who are placed
 # in a chroot() jail in their home directory upon login.
 # The meaning is slightly different if chroot_local_user is set to YES.
 # In this case, the list becomes a list of users which are NOT to be placed
 # in a chroot() jail. By default, the file containing this list is
 # /etc/vsftpd.chroot_list, but you may override this with the chroot_list_file setting.
-default[:vsftpd][:chroot_list_enable] = true
-# !!!!
-default[:vsftpd][:chroot_users] = Array.new
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+default[:vsftpd][:chroot_list_enable] = false
+#
+# The actual users
+default[:vsftpd][:chroot_users] = []
 #
 # The option is the name of a file containing a list of local users which
 # will be placed in a chroot() jail in their home directory.
 # This option is only relevant if the option chroot_list_enable is enabled.
 # If the option chroot_local_user is enabled, then the list file becomes a list
 # of users to NOT place in a chroot() jail.
-default[:vsftpd][:chroot_list_file] = "/etc/vsftpd.chroot_list"
+default[:vsftpd][:chroot_list_file] = "/etc/vsftpd/chroot_list.conf"
 
 
 
@@ -222,16 +205,21 @@ default[:vsftpd][:data_connection_timeout] = 120
 # which should not be accessible in any way. The affected items are not hidden,
 # but any attempt to do anything to them (download, change into directory,
 # affect something within directory etc.) will be denied.
-default[:vsftpd][:deny_file] = Array.new
+default[:vsftpd][:deny_file] = []
 #
 # If vsftpd is in standalone mode, this is the maximum number of clients
 # which may be connected from the same source internet address.
 # A client will get an error message if they go over this limit.
 default[:vsftpd][:max_per_ip] = 0
+#
+# If enabled, all user and group information in directory listings will be
+# displayed as "ftp".
+default[:vsftpd][:hide_ids] = true
 
 
 
 ### VIRTUAL USER OPTIONS
+#
 default[:vsftpd][:virtual_users_enable] = false
 #
 # See the boolean setting guest_enable for a description of what  constitutes
@@ -251,9 +239,25 @@ default[:vsftpd][:guest_enable] = false
 # For example, many settings only prior to the user's session being started.
 # Examples of settings which will not affect any behviour on a per-user basis
 # include listen_address, banner_file, max_per_ip, max_clients, xferlog_file, etc.
-default[:vsftpd][:user_config_dir] = "/etc/vsftpd.userconf"
+default[:vsftpd][:user_config_dir] = "/etc/vsftpd/users"
+#
+# Where should vsfptd pam.d look for user passwords
+default[:vsftpd][:user_passwd_file] = "/etc/vsftpd/.passwd"
 #
 # If enabled, virtual users will use the same privileges as local users.
 # By default, virtual users will use the same privileges as anonymous users,
 # which tends to be more restrictive (especially in terms of write access).
 default[:vsftpd][:virtual_use_local_privs] = false
+#
+# This option is useful is conjunction with virtual users. It is used to
+# automatically generate a home directory for each virtual user, based on a
+# template. For example, if the home directory of the real user specified via
+# guest_username is /home/virtual/$USER, and user_sub_token is set to $USER,
+# then when virtual user fred logs in, he will end up (usually chroot()'ed) in
+# the directory /home/virtual/fred. This option also takes affect if local_root
+# contains user_sub_token.
+default[:vsftpd][:user_sub_token] = "$USER"
+#
+# This option represents a directory which vsftpd will try to change into after
+# a local (i.e. non-anonymous) login. Failure is silently ignored.
+default[:vsftpd][:local_root] = "/home/$USER"

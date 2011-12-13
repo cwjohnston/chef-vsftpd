@@ -19,7 +19,7 @@ use_localtime=<%= node[:vsftpd][:use_localtime] ? 'YES' : 'NO' %>
 xferlog_enable=<%= node[:vsftpd][:xferlog_enable] ? 'YES' : 'NO' %>
 connect_from_port_20=<%= node[:vsftpd][:connect_from_port_20] ? 'YES' : 'NO' %>
 chown_uploads=<%= node[:vsftpd][:chown_uploads] ? 'YES' : 'NO' %>
-chown_username=<%= node[:vsftpd][:username] %>
+chown_username=<%= node[:vsftpd][:chown_username] %>
 xferlog_file=<%= node[:vsftpd][:xferlog_file] %>
 xferlog_std_format=<%= node[:vsftpd][:xferlog_std_format] ? 'YES' : 'NO' %>
 idle_session_timeout=<%= node[:vsftpd][:idle_session_timeout] %>
@@ -27,12 +27,13 @@ data_connection_timeout=<%= node[:vsftpd][:data_connection_timeout] %>
 nopriv_user=<%= node[:vsftpd][:nopriv_user] %>
 async_abor_enable=<%= node[:vsftpd][:async_abor_enable] ? 'YES' : 'NO' %>
 max_per_ip=<%= node[:vsftpd][:max_per_ip] %>
-chroot_local_user=<%= node[:vsftpd][:chroot_local_user] %>
+chroot_local_user=<%= node[:vsftpd][:chroot_local_user] ? 'YES' : 'NO' %>
+passwd_chroot_enable=<%= node[:vsftpd][:passwd_chroot_enable] ? 'YES' : 'NO' %>
 chroot_list_enable=<%= node[:vsftpd][:chroot_list_enable] ? 'YES' : 'NO' %>
 chroot_list_file=<%= node[:vsftpd][:chroot_list_file] %>
-secure_chroot_dir=/var/run/vsftpd/empty
 pam_service_name=<%= node[:vsftpd][:pam_service_name] %>
 setproctitle_enable=<%= node[:vsftpd][:setproctitle_enable] ? 'YES' : 'NO' %>
+hide_ids=<%= node[:vsftpd][:hide_ids] ? 'YES' : 'NO' %>
 <% if node[:vsftpd][:ssl_enable] %>
 ssl_enable=<%= node[:vsftpd][:ssl_enable] ? 'YES': 'NO' %>
 rsa_cert_file=<%= node[:vsftpd][:ssl_cert_path] %>/<%= node[:vsftpd][:ssl_certs_basename] %>.pem
@@ -44,6 +45,8 @@ user_config_dir=<%= node[:vsftpd][:user_config_dir] %>
 guest_enable=<%= node[:vsftpd][:guest_enable] ? 'YES' : 'NO' %>
 guest_username=<%= node[:vsftpd][:guest_username] %>
 virtual_use_local_privs=<%= node[:vsftpd][:virtual_use_local_privs] ? 'YES' : 'NO' %>
+user_sub_token=<%= node[:vsftpd][:user_sub_token] %>
+local_root=<%= node[:vsftpd][:local_root] %>
 <% end %>
 <% if node[:vsftpd][:deny_file].count >= 1 %>
 deny_file={<%= node[:vsftpd][:deny_file].join(",") %>}
