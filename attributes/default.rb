@@ -45,7 +45,7 @@ default[:vsftpd][:pasv_max_port] = "1048"
 
 
 
-### LOGIN OPTIONS
+### PERMISSIONS
 #
 # Controls whether anonymous logins are permitted or not.
 # If enabled, both the usernames ftp and anonymous are recognised
@@ -62,10 +62,11 @@ default[:vsftpd][:local_enable] = true
 # are allowed or not. These commands are: STOR, DELE, RNFR, RNTO, MKD,
 # RMD, APPE and SITE.
 default[:vsftpd][:write_enable] = false
-
-
-
-### ANONYMOUS USER OPTIONS
+#
+# The value that the umask for file creation is set to for local users. NOTE!
+# If you want to specify octal values, remember the "0" prefix otherwise the
+# value will be treated as a base 10 integer!
+default[:vsftpd][:local_umask] = "022"
 #
 # If set to YES, anonymous users will be permitted to upload files
 # under certain conditions. For this to work, the option write_enable
@@ -140,7 +141,6 @@ default[:vsftpd][:chroot_list_file] = "/etc/vsftpd/chroot_list.conf"
 #  By enabling this option, you are declaring that you trust the security
 #  of your installed OpenSSL library.
 default[:vsftpd][:ssl_enable] = false
-default[:vsftpd][:use_ssl_certs_from_cookbook] = true
 #
 # If set to yes, all SSL data connections are required to exhibit
 # SSL session reuse (which proves that they know the same master secret
@@ -151,7 +151,8 @@ default[:vsftpd][:use_ssl_certs_from_cookbook] = true
 default[:vsftpd][:require_ssl_reuse] = false
 default[:vsftpd][:ssl_cert_path] = "/etc/ssl/certs"
 default[:vsftpd][:ssl_private_key_path] = "/etc/ssl/private"
-default[:vsftpd][:ssl_certs_basename] = "ftp.example.com"
+default[:vsftpd][:ssl_cert_name] = "vsftpd"
+default[:vsftpd][:ssl_cert_cookbook] = "vsftpd"
 
 
 

@@ -1,7 +1,7 @@
 package "vsftpd"
 
 service "vsftpd" do
-  supports :status => true, :restart => true
+  supports :status => true, :stop => true, :start => true, :restart => true
   action :enable
 end
 

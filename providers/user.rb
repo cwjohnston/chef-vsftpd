@@ -1,32 +1,38 @@
 action :add do
-  execute "Adding #{new_resource.username} to Apache authentication" do
-    command %{
-      if [ $(grep -c #{htdigest.first} #{new_resource.passwd_file}) -gt 0 ]; then
-        sed -i 's/#{htdigest.first}.*/#{htdigest}/g' #{new_resource.passwd_file}
-      else
-        echo #{htdigest} >> #{new_resource.passwd_file}
-      fi
+  bash "Adding #{new_resource.username} to vsftp" do
+    code %{
+      htpasswd -b #{node.vsftpd.user_passwd_file} #{new_resource.username} #{new_resource.password}
     }
-    only_if "[ $(egrep -c '#{htdigest}$' #{new_resource.passwd_file}) -eq 0 ]"
+    notifies :restart, resources(:service => "vsftpd"), :delayed
+  end
+
+  file "/#{node.vsftpd.user_config_dir}/#{new_resource.username}" do
+    owner "root"
+    group "root"
+    mode 0644
+    content "local_root=/home/gerhard/edi.lazu.ro"
+    notifies :restart, resources(:service => "vsftpd"), :delayed
   end
 end
 
 action :remove do
-  execute "Removing #{new_resource.username} from Apache authentication" do
-    command %{
-      sed -i '/#{htdigest.first}.*/ d' #{new_resource.passwd_file}
+  bash "Removing #{new_resource.username} from vsftpd authentication" do
+    code %{
+      sed -i '/#{new_resource.username}.*/ d' #{node.vsftpd.user_passwd_file}
     }
+    notifies :restart, resources(:service => "vsftpd"), :delayed
   end
 end
 
 def load_current_resource
-  extend Apache2::Passwd
+  service "vsftpd" do
+    supports :status => true, :stop => true, :start => true, :restart => true
+  end
 
-  file new_resource.passwd_file do
-    mode "0644"
+  file node.vsftpd.user_passwd_file do
     owner "root"
     group "root"
+    mode 0600
     action :create_if_missing
-    backup false
   end
 end

@@ -12,6 +12,7 @@ pasv_address=<%= node[:vsftpd][:ipaddress] %>
 anonymous_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
 local_enable=<%= node[:vsftpd][:local_enable] ? 'YES' : 'NO' %>
 write_enable=<%= node[:vsftpd][:write_enable] ? 'YES' : 'NO' %>
+local_umask=<%= node[:vsftpd][:local_umask] %>
 anon_upload_enable=<%= node[:vsftpd][:anon_upload_enable] ? 'YES' : 'NO' %>
 anon_mkdir_write_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
 dirmessage_enable=<%= node[:vsftpd][:dirmessage_enable] ? 'YES' : 'NO' %>
@@ -36,8 +37,8 @@ setproctitle_enable=<%= node[:vsftpd][:setproctitle_enable] ? 'YES' : 'NO' %>
 hide_ids=<%= node[:vsftpd][:hide_ids] ? 'YES' : 'NO' %>
 <% if node[:vsftpd][:ssl_enable] %>
 ssl_enable=<%= node[:vsftpd][:ssl_enable] ? 'YES': 'NO' %>
-rsa_cert_file=<%= node[:vsftpd][:ssl_cert_path] %>/<%= node[:vsftpd][:ssl_certs_basename] %>.pem
-rsa_private_key_file=<%= node[:vsftpd][:ssl_private_key_path] %>/<%= node[:vsftpd][:ssl_certs_basename] %>.key
+rsa_cert_file=<%= node[:vsftpd][:ssl_cert_path] %>/<%= node[:vsftpd][:ssl_cert_name] %>.pem
+rsa_private_key_file=<%= node[:vsftpd][:ssl_private_key_path] %>/<%= node[:vsftpd][:ssl_cert_name] %>.key
 require_ssl_reuse=<%= node[:vsftpd][:require_ssl_reuse] ? 'YES' : 'NO' %>
 <% end %>
 <% if node[:vsftpd][:virtual_users_enable] %>
