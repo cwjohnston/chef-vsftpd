@@ -10,7 +10,7 @@ action :add do
     owner "root"
     group "root"
     mode 0644
-    content "local_root=#{new_resource.path}"
+    content "local_root=#{new_resource.root}"
     notifies :restart, resources(:service => "vsftpd"), :delayed
   end
 end
