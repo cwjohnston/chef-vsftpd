@@ -21,6 +21,7 @@ xferlog_enable=<%= node[:vsftpd][:xferlog_enable] ? 'YES' : 'NO' %>
 connect_from_port_20=<%= node[:vsftpd][:connect_from_port_20] ? 'YES' : 'NO' %>
 chown_uploads=<%= node[:vsftpd][:chown_uploads] ? 'YES' : 'NO' %>
 chown_username=<%= node[:vsftpd][:chown_username] %>
+chmod_enable=<%= node[:vsftpd][:chmod_enable] ? 'YES' : 'NO' %>
 xferlog_file=<%= node[:vsftpd][:xferlog_file] %>
 xferlog_std_format=<%= node[:vsftpd][:xferlog_std_format] ? 'YES' : 'NO' %>
 idle_session_timeout=<%= node[:vsftpd][:idle_session_timeout] %>

@@ -91,6 +91,10 @@ default[:vsftpd][:chown_uploads] = false
 # uploaded files. This option is only relevant if another option,
 # chown_uploads, is set.
 default[:vsftpd][:chown_username] = "ftp"
+#
+# When enabled, allows use of the SITE CHMOD command. NOTE! This only applies to
+# local users. Anonymous users never get to use SITE CHMOD.
+default[:vsftpd][:chmod_enable] = true
 
 
 
