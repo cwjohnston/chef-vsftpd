@@ -227,7 +227,7 @@ default[:vsftpd][:hide_ids] = true
 #
 default[:vsftpd][:virtual_users_enable] = false
 #
-# See the boolean setting guest_enable for a description of what  constitutes
+# See the boolean setting guest_enable for a description of what constitutes
 # a guest login. This setting is the real username which guest users are mapped to.
 default[:vsftpd][:guest_username] = "ftp"
 #
