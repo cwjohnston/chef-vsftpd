@@ -1,3 +1,4 @@
+# -*- coding: undecided -*-
 ### RUNTIME OPTIONS
 #
 default[:vsftpd][:ipaddress] = (node[:cloud] && node[:cloud][:public_ipv4]) || node[:ipaddress]
@@ -71,7 +72,7 @@ default[:vsftpd][:local_umask] = "022"
 # This option represents a directory  which  vsftpd  will  try  to
 # change  into  after  an  anonymous  login.  Failure  is silently
 # ignored.
-default[:vsftpd][:anon_root] = "/var/spool/ftp/public"
+default[:vsftpd][:anon_root] = nil
 #
 # If set to YES, anonymous users will be permitted to upload files
 # under certain conditions. For this to work, the option write_enable
@@ -162,7 +163,12 @@ default[:vsftpd][:ssl_cert_path] = "/etc/ssl/certs"
 default[:vsftpd][:ssl_private_key_path] = "/etc/ssl/private"
 default[:vsftpd][:ssl_cert_name] = "vsftpd"
 default[:vsftpd][:ssl_cert_cookbook] = "vsftpd"
-
+#
+# This option can be used to select which SSL ciphers vsftpd will allow for
+# encrypted SSL connections. See the ciphers man page for further details. Note
+# that restricting ciphers can be a useful security precaution as it prevents
+# malicious remote parties forcing a cipher which they have found problems with.
+default[:vsftpd][:ssl_ciphers] = "DES-CBC3-SHA"
 
 
 ### LOGGING OPTIONS
@@ -172,11 +178,29 @@ default[:vsftpd][:ssl_cert_cookbook] = "vsftpd"
 # but this location may be overridden using the configuration setting vsftpd_log_file.
 default[:vsftpd][:xferlog_enable] = false
 #
+# If enabled, two log files are generated in parallel, going by default to
+# /var/log/xferlog and /var/log/vsftpd.log.  The former is a wu-ftpd style
+# transfer log, parseable by standard tools.  The latter is vsftpd's own style
+# log.
+default[:vsftpd][:dual_log_enable] = false
+#
+# If enabled, then any log output which would have gone to /var/log/vsftpd.log
+# goes to the system log instead.  Logging is done under the FTPD facility.
+default[:vsftpd][:syslog_enable] = false
+#
+# This option is the name of the file to which we write the vsftpd style log
+# file. This log is only written if the option xferlog_enable is set, and
+# xferlog_std_format is NOT set. Alternatively, it is written if you have set
+# the option dual_log_enable.  One further complication if you have set
+# syslog_enable, then this file is not written and output is sent to the system
+# log instead.
+default[:vsftpd][:vsftpd_log_file] = "/var/log/vsftpd.log"
+#
 # This option is the name of the file to which we write the wu-ftpd style
 # transfer log. The transfer log is only written if the option xferlog_enable
 # is set, along with xferlog_std_format. Alternatively, it is written
 # if you have set the option dual_log_enable.
-default[:vsftpd][:xferlog_file] = "/var/log/vsftpd.log"
+default[:vsftpd][:xferlog_file] = "/var/log/xferlog"
 #
 # If enabled, the transfer log file will be written in standard xferlog format,
 # as used by wu-ftpd. This is useful because you can reuse existing
@@ -184,7 +208,10 @@ default[:vsftpd][:xferlog_file] = "/var/log/vsftpd.log"
 # The default location for this style of log file is /var/log/xferlog,
 # but you may change it with the setting xferlog_file.
 default[:vsftpd][:xferlog_std_format] = false
-
+#
+# When enabled, all FTP requests and responses are logged, providing the option
+# xferlog_std_format is not enabled. Useful for debugging.
+default[:vsftpd][:log_ftp_protocol] = false
 
 
 ### SESSION AND SECURITY OPTIONS
