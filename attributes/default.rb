@@ -1,6 +1,6 @@
 ### RUNTIME OPTIONS
 #
-default[:vsftpd][:ipaddress] = node[:ipaddress]
+default[:vsftpd][:ipaddress] = (node[:cloud] && node[:cloud][:public_ipv4]) || node[:ipaddress]
 #
 # If enabled, vsftpd will display directory listings with the time in your
 # local time zone. The default is to display GMT.
@@ -67,6 +67,11 @@ default[:vsftpd][:write_enable] = false
 # If you want to specify octal values, remember the "0" prefix otherwise the
 # value will be treated as a base 10 integer!
 default[:vsftpd][:local_umask] = "022"
+#
+# This option represents a directory  which  vsftpd  will  try  to
+# change  into  after  an  anonymous  login.  Failure  is silently
+# ignored.
+default[:vsftpd][:anon_root] = "/var/spool/ftp/public"
 #
 # If set to YES, anonymous users will be permitted to upload files
 # under certain conditions. For this to work, the option write_enable

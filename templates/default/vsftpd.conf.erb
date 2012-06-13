@@ -9,12 +9,17 @@ pasv_min_port=<%= node[:vsftpd][:pasv_min_port] %>
 pasv_max_port=<%= node[:vsftpd][:pasv_max_port] %>
 pasv_address=<%= node[:vsftpd][:ipaddress] %>
 <% end %>
-anonymous_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
+<% if node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
+anonymous_enable=YES
+anon_root=<%= node[:vsftpd][:anon_root] %>
+anon_upload_enable=<%= node[:vsftpd][:anon_upload_enable] ? 'YES' : 'NO' %>
+anon_mkdir_write_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
+<% else %>
+anonymous_enable=NO
+<% end %>
 local_enable=<%= node[:vsftpd][:local_enable] ? 'YES' : 'NO' %>
 write_enable=<%= node[:vsftpd][:write_enable] ? 'YES' : 'NO' %>
 local_umask=<%= node[:vsftpd][:local_umask] %>
-anon_upload_enable=<%= node[:vsftpd][:anon_upload_enable] ? 'YES' : 'NO' %>
-anon_mkdir_write_enable=<%= node[:vsftpd][:anonymous_enable] ? 'YES' : 'NO' %>
 dirmessage_enable=<%= node[:vsftpd][:dirmessage_enable] ? 'YES' : 'NO' %>
 use_localtime=<%= node[:vsftpd][:use_localtime] ? 'YES' : 'NO' %>
 xferlog_enable=<%= node[:vsftpd][:xferlog_enable] ? 'YES' : 'NO' %>
@@ -37,12 +42,12 @@ pam_service_name=<%= node[:vsftpd][:pam_service_name] %>
 setproctitle_enable=<%= node[:vsftpd][:setproctitle_enable] ? 'YES' : 'NO' %>
 hide_ids=<%= node[:vsftpd][:hide_ids] ? 'YES' : 'NO' %>
 <% if node[:vsftpd][:ssl_enable] %>
-ssl_enable=<%= node[:vsftpd][:ssl_enable] ? 'YES': 'NO' %>
-rsa_cert_file=<%= node[:vsftpd][:ssl_cert_path] %>/<%= node[:vsftpd][:ssl_cert_name] %>.pem
-rsa_private_key_file=<%= node[:vsftpd][:ssl_private_key_path] %>/<%= node[:vsftpd][:ssl_cert_name] %>.key
+ssl_enable=YES
+rsa_cert_file=<%= node[:vsftpd][:ssl_cert_path] %>
+rsa_private_key_file=<%= node[:vsftpd][:ssl_private_key_path] %>
 require_ssl_reuse=<%= node[:vsftpd][:require_ssl_reuse] ? 'YES' : 'NO' %>
 <% end %>
-<% if node[:vsftpd][:virtual_users_enable] %>
+<% if node[:vsftpd][:virtual_users_enable] || (node[:vsftpd][:virtual_users] && node[:vsftpd][:virtual_users].any?) %>
 user_config_dir=<%= node[:vsftpd][:user_config_dir] %>
 guest_enable=<%= node[:vsftpd][:guest_enable] ? 'YES' : 'NO' %>
 guest_username=<%= node[:vsftpd][:guest_username] %>
@@ -53,3 +58,8 @@ local_root=<%= node[:vsftpd][:local_root] %>
 <% if node[:vsftpd][:deny_file].count >= 1 %>
 deny_file={<%= node[:vsftpd][:deny_file].join(",") %>}
 <% end %>
+
+log_ftp_protocol=YES
+#allow_writable_chroot=YES
+dual_log_enable=YES
+
