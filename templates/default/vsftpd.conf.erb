@@ -49,6 +49,10 @@ ssl_enable=YES
 rsa_cert_file=<%= node[:vsftpd][:ssl_cert_path] %>
 rsa_private_key_file=<%= node[:vsftpd][:ssl_private_key_path] %>
 require_ssl_reuse=<%= node[:vsftpd][:require_ssl_reuse] ? 'YES' : 'NO' %>
+ssl_sslv2=<%= node[:vsftpd][:ssl_sslv2] ? 'YES' : 'NO' %>
+ssl_sslv3=<%= node[:vsftpd][:ssl_sslv3] ? 'YES' : 'NO' %>
+ssl_tlsv1=<%= node[:vsftpd][:ssl_tlsv1] ? 'YES' : 'NO' %>
+debug_ssl=<%= node[:vsftpd][:debug_ssl] ? 'YES' : 'NO' %>
 ssl_ciphers=<%= node[:vsftpd][:ssl_ciphers] %>
 <% end %>
 <% if node[:vsftpd][:virtual_users_enable] || (node[:vsftpd][:virtual_users] && node[:vsftpd][:virtual_users].any?) %>

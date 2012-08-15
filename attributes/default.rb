@@ -170,6 +170,18 @@ default[:vsftpd][:ssl_cert_cookbook] = "vsftpd"
 # malicious remote parties forcing a cipher which they have found problems with.
 default[:vsftpd][:ssl_ciphers] = "DES-CBC3-SHA"
 
+# Only applies if ssl_enable is activated. If enabled, this option will permit SSL v2
+# protocol connections.  TLS v1 connections are preferred.
+default[:vsftpd][:ssl_sslv2] = false
+# Only applies if ssl_enable is activated. If enabled, this option will permit SSL v3
+# protocol connections.  TLS v1 connections are preferred.
+default[:vsftpd][:ssl_sslv3] = false
+# Only applies if ssl_enable is activated. If enabled, this option will permit TLS v1
+# protocol connections.  TLS v1 connections are preferred.
+default[:vsftpd][:ssl_tlsv1] = true
+# If true, OpenSSL connection diagnostics are dumped to the vsftpd log file.
+# (Added in v2.0.6).
+default[:vsftpd][:debug_ssl] = false
 
 ### LOGGING OPTIONS
 #
