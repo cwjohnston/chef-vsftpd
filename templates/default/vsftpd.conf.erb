@@ -54,6 +54,7 @@ ssl_sslv3=<%= node[:vsftpd][:ssl_sslv3] ? 'YES' : 'NO' %>
 ssl_tlsv1=<%= node[:vsftpd][:ssl_tlsv1] ? 'YES' : 'NO' %>
 debug_ssl=<%= node[:vsftpd][:debug_ssl] ? 'YES' : 'NO' %>
 ssl_ciphers=<%= node[:vsftpd][:ssl_ciphers] %>
+ssl_request_cert=<%= node[:vsftpd][:ssl_request_cert] ? 'YES' : 'NO' %>
 <% end %>
 <% if node[:vsftpd][:virtual_users_enable] || (node[:vsftpd][:virtual_users] && node[:vsftpd][:virtual_users].any?) %>
 user_config_dir=<%= node[:vsftpd][:user_config_dir] %>

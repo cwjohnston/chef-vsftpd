@@ -169,6 +169,10 @@ default[:vsftpd][:ssl_cert_cookbook] = "vsftpd"
 # that restricting ciphers can be a useful security precaution as it prevents
 # malicious remote parties forcing a cipher which they have found problems with.
 default[:vsftpd][:ssl_ciphers] = "DES-CBC3-SHA"
+# If enabled, vsftpd will request (but not necessarily require; see require_cert) a
+# certificate on incoming SSL connections.  Normally this should not cause any trouble at
+# all, but IBM zOS seems to have issues. (New in v2.0.7).
+default[:vsftpd][:ssl_request_cert] = true
 
 # Only applies if ssl_enable is activated. If enabled, this option will permit SSL v2
 # protocol connections.  TLS v1 connections are preferred.
