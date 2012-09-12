@@ -1,4 +1,3 @@
-# -*- coding: undecided -*-
 ### RUNTIME OPTIONS
 #
 default[:vsftpd][:ipaddress] = (node[:cloud] && node[:cloud][:public_ipv4]) || node[:ipaddress]
