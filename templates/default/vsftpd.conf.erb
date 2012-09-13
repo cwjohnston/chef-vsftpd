@@ -21,6 +21,7 @@ local_umask=<%= node[:vsftpd][:local_umask] %>
 dirmessage_enable=<%= node[:vsftpd][:dirmessage_enable] ? 'YES' : 'NO' %>
 use_localtime=<%= node[:vsftpd][:use_localtime] ? 'YES' : 'NO' %>
 # Logging
+syslog_enable=<%= node[:vsftpd][:syslog_enable] ? 'YES' : 'NO' %>
 xferlog_enable=<%= node[:vsftpd][:xferlog_enable] ? 'YES' : 'NO' %>
 dual_log_enable=<%= node[:vsftpd][:dual_log_enable] ? 'YES' : 'NO' %>
 vsftpd_log_file=<%= node[:vsftpd][:vsftpd_log_file] %>
