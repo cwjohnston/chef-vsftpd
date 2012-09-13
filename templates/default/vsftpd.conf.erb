@@ -63,6 +63,8 @@ guest_enable=<%= node[:vsftpd][:guest_enable] ? 'YES' : 'NO' %>
 guest_username=<%= node[:vsftpd][:guest_username] %>
 virtual_use_local_privs=<%= node[:vsftpd][:virtual_use_local_privs] ? 'YES' : 'NO' %>
 user_sub_token=<%= node[:vsftpd][:user_sub_token] %>
+<% end %>
+<% if node['vsftpd']['local_root'] %>
 local_root=<%= node[:vsftpd][:local_root] %>
 <% end %>
 <% if node[:vsftpd][:deny_file].count >= 1 %>
