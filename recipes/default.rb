@@ -17,3 +17,11 @@ directory "/etc/vsftpd" do
   group "root"
   mode 0755
 end
+
+if node['vsftpd']['chroot_local_user'] or node['vsftpd']['chroot_list_enable']
+  include_recipe "vsftpd::chroot_users"
+end
+
+if node['vsftpd']['virtual_users_enable']
+  include_recipe "vsftpd::virtual_users"
+end
