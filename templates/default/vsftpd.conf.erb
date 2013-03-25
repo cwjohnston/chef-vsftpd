@@ -56,6 +56,9 @@ ssl_tlsv1=<%= node[:vsftpd][:ssl_tlsv1] ? 'YES' : 'NO' %>
 debug_ssl=<%= node[:vsftpd][:debug_ssl] ? 'YES' : 'NO' %>
 ssl_ciphers=<%= node[:vsftpd][:ssl_ciphers] %>
 ssl_request_cert=<%= node[:vsftpd][:ssl_request_cert] ? 'YES' : 'NO' %>
+allow_anon_ssl=<%= node[:vsftpd][:allow_anon_ssl] ? 'YES' : 'NO' %>
+force_local_data_ssl=<%= node[:vsftpd][:force_local_data_ssl] ? 'YES' : 'NO' %>
+force_local_logins_ssl=<%= node[:vsftpd][:force_local_logins_ssl] ? 'YES' : 'NO' %>
 <% end %>
 <% if node[:vsftpd][:virtual_users_enable] || (node[:vsftpd][:virtual_users] && node[:vsftpd][:virtual_users].any?) %>
 user_config_dir=<%= node[:vsftpd][:user_config_dir] %>
@@ -69,4 +72,8 @@ local_root=<%= node[:vsftpd][:local_root] %>
 <% end %>
 <% if node[:vsftpd][:deny_file].count >= 1 %>
 deny_file={<%= node[:vsftpd][:deny_file].join(",") %>}
+<% end %>
+
+<% if node['vsftpd']['ftpd_banner'] %>
+ftpd_banner=<%= node[:vsftpd][:ftpd_banner] %>
 <% end %>
