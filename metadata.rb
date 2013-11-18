@@ -1,3 +1,4 @@
+name             "vsftpd"
 maintainer       "Gerhard Lazu"
 maintainer_email "gerhard@lazu.co.uk"
 license          "Apache License, Version 2.0"
