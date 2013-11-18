@@ -13,13 +13,23 @@ action :add do
     notifies :restart, "service[vsftpd]"
   end
 
-  file ::File.join(node[:vsftpd][:user_config_dir], new_resource.user) do
+  directory new_resource.root do
+    owner new_resource.local_user || node[:vsftpd][:guest_username]
+    group current_resource.group
+    recursive true
+    mode new_resource.mode
+  end
+
+  template ::File.join(node[:vsftpd][:user_config_dir], new_resource.user) do
+    source "vuser.config.erb"
+    cookbook "vsftpd"
     owner "root"
     group "root"
     mode 0644
-    root = "local_root=#{new_resource.root.sub(%r!/\./.*!,'')}\n"
-    user = "guest_username=#{new_resource.local_user}\n" unless new_resource.local_user.to_s.empty?
-    content "#{root}#{user}"
+    variables(
+      :root => new_resource.root.sub(%r!/\./.*!,''),
+      :user => new_resource.local_user
+    )
     notifies :restart, "service[vsftpd]"
   end
 end
@@ -39,11 +49,12 @@ action :remove do
 end
 
 def load_current_resource
-  include_recipe "vsftpd"
+  include_recipe "vsftpd::virtual_users"
 
   @current_resource = Chef::Resource::VsftpdUser.new(@new_resource.name)
   @current_resource.name(@new_resource.name)
   @current_resource.user(@new_resource.user)
+  @current_resource.group(new_resource.group || current_resource.user)
   @current_resource.password(@new_resource.password)
   @current_resource.exists = true if already_there?(@current_resource.user, @current_resource.password)
 end
