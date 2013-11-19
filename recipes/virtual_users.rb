@@ -8,7 +8,9 @@ template "/etc/pam.d/vsftpd.virtual" do
   mode 0644
   backup false
 end
-node.set[:vsftpd][:pam_service_name] = "vsftpd.virtual"
+node.default[:vsftpd][:pam_service_name] = "vsftpd.virtual"
+node.default[:vsftpd][:virtual_users_enable] = true
+node.default[:vsftpd][:guest_enable] = true
 
 include_recipe "vsftpd"
 
@@ -37,5 +39,6 @@ node[:vsftpd][:virtual_users].each do |vuser|
     password vuser[:password]
     root vuser[:root]
     local_user vuser[:local_user] if vuser[:local_user]
+    notifies :restart, "service[vsftpd]"
   end
 end

@@ -1,16 +1,13 @@
-#use_inline_resources
+use_inline_resources
 
 include Chef::DSL::IncludeRecipe
 
 action :add do
-  include_recipe "vsftpd"
- 
   ruby_block "update #{new_resource }" do
     block do
       update
     end
     not_if { current_resource.exists }
-    notifies :restart, "service[vsftpd]"
   end
 
   directory new_resource.root do
@@ -30,7 +27,6 @@ action :add do
       :root => new_resource.root.sub(%r!/\./.*!,''),
       :user => new_resource.local_user
     )
-    notifies :restart, "service[vsftpd]"
   end
 end
 
@@ -39,12 +35,10 @@ action :remove do
     code %{
       sed -i '/#{new_resource.user}.*/ d' #{node[:vsftpd][:user_passwd_file]}
     }
-    notifies :restart, "service[vsftpd]"
   end
 
   file ::File.join(node[:vsftpd][:user_config_dir], new_resource.user) do
     action :delete
-    notifies :restart, "service[vsftpd]"
   end
 end
 
