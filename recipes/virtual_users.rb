@@ -1,13 +1,18 @@
 package "libpam-pwdfile"
 package "openssl"
 
-template "/etc/pam.d/vsftpd" do
+template "/etc/pam.d/vsftpd.virtual" do
   source "vsftpd-pam.erb"
   owner "root"
   group "root"
   mode 0644
   backup false
 end
+node.default[:vsftpd][:pam_service_name] = "vsftpd.virtual"
+node.default[:vsftpd][:virtual_users_enable] = true
+node.default[:vsftpd][:guest_enable] = true
+
+include_recipe "vsftpd"
 
 directory node[:vsftpd][:user_config_dir] do
   owner "root"
@@ -15,18 +20,25 @@ directory node[:vsftpd][:user_config_dir] do
   mode 0755
 end
 
-(node[:vsftpd][:virtual_users] || []).each do |u|
-  directory u[:root].gsub('/./','/') do
-    owner u[:local_user] || node[:vsftpd][:guest_username]
-    group u[:group]
+file node[:vsftpd][:user_passwd_file] do
+  owner "root"
+  group "root"
+  mode 0600
+end
+
+node[:vsftpd][:virtual_users].each do |vuser|
+  directory vuser[:root].gsub('/./','/') do
+    owner vuser[:local_user] || node[:vsftpd][:guest_username]
+    group vuser[:group]
     recursive true
-    mode u[:mode]
+    mode vuser[:mode]
   end
-  vsftpd_user u[:name] do
+  vsftpd_user vuser[:name] do
     action :add
-    username u[:name]
-    password u[:password]
-    root u[:root]
-    local_user u[:local_user] if u[:local_user]
+    username vuser[:name]
+    password vuser[:password]
+    root vuser[:root]
+    local_user vuser[:local_user] if vuser[:local_user]
+    notifies :restart, "service[vsftpd]"
   end
 end

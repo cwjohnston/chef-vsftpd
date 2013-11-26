@@ -1,15 +1,10 @@
 package "vsftpd"
 
-service "vsftpd" do
-  supports :status => true, :stop => true, :start => true, :restart => true
-  action :enable
-end
-
 template "/etc/vsftpd.conf" do
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, resources(:service => "vsftpd"), :delayed
+  notifies :restart, "service[vsftpd]"
 end
 
 directory "/etc/vsftpd" do
@@ -18,10 +13,16 @@ directory "/etc/vsftpd" do
   mode 0755
 end
 
-if node['vsftpd']['chroot_local_user'] or node['vsftpd']['chroot_list_enable']
-  include_recipe "vsftpd::chroot_users"
+directory node[:vsftpd][:user_config_dir] do
+  owner "root"
+  group "root"
+  mode 0755
 end
 
-if node['vsftpd']['virtual_users_enable']
-  include_recipe "vsftpd::virtual_users"
+include_recipe "vsftpd::chroot_users" if node['vsftpd']['chroot_local_user'] || node['vsftpd']['chroot_list_enable']
+include_recipe "vsftpd::virtual_users" if node['vsftpd']['virtual_users_enable']
+
+service "vsftpd" do
+  supports :status => true, :stop => true, :start => true, :restart => true
+  action [:enable, :start]
 end
