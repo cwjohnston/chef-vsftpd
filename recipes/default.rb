@@ -1,7 +1,14 @@
 package "vsftpd"
 
+if node[:platform] == "ubuntu" and Chef::VersionConstraint.
+  new('>= 13.10').include?(node['platform_version'])
+  provider = Chef::Provider::Service::Upstart
+end
+
+
 service "vsftpd" do
   supports :status => true, :stop => true, :start => true, :restart => true
+  provider provider unless provider.nil?
   action :enable
 end
 
